@@ -10,14 +10,19 @@ import time ##для sleep
 
 current_date = str(date.today()) ##текущая дата
 options = Options()
-options.add_argument("--headless") ##опция, чтобы браузер не открывался в явном виде
+#options.add_argument("--headless")
+options.add_argument('--allow-profiles-outside-user-dir')
+options.add_argument('--enable-profile-shortcut-manager')
+options.add_argument(r'user-data-dir=C:/Users/Kirill/Desktop/profiles')
+options.add_argument('--profile-directory=Profile 1') 
 
 browser = webdriver.Chrome(options=options) ##открываем браузер
 browser.set_window_size(1051, 806) ##размер окна браузера
 ##открываем таблицу
 df = pd.read_csv("C:/Users/Kirill/Desktop/project/output.csv", delimiter = ",", encoding='utf-8')
 ##открываем сайт
-browser.get("https://xn--80aaepkoi5a5le.xn--p1ai/catalog/voda/voda_pitevaya_zhivaya_kaplya_19l/?oid=1139")
+
+browser.get("https://живаякапля.рф/catalog/water/water_drinking_zhivaya_kaplya_19l/?oid=1026")
 time.sleep(3) ##время на загрузку элементов сайта
 try:
     button1 = browser.find_element("xpath", '//*[@id="main"]/div[28]/div/div[2]/span[1]')
@@ -25,11 +30,18 @@ try:
 except Exception:
     pass
 time.sleep(1)
-button2 = browser.find_element("xpath", '//*[@id="bx_117848907_1067_prop_720_list"]/li[5]/span/span')
+button2 = browser.find_element("xpath", '//*[@id="bx_117848907_1012_prop_842_list"]/li[3]/span/span')
 button2.click() ##находим и нажимаем нужную кнопку
+time.sleep(1)
+button3 = browser.find_element("xpath", '//*[@id="bx_117848907_1012_basket_actions"]/a')
+button3.click()
 time.sleep(2)
 ##находим элемент с ценой
-price2 = browser.find_element("xpath", '//*[@id="content"]/div[2]/div/div/div/div/div/div/div/div[2]/div/div[3]/div[1]/div[1]/div[1]/span[1]').text
+price2 = browser.find_element("xpath", '//*[@id="basket-item-price-337"]').text
+time.sleep(1)
+price1 = browser.find_element("xpath", '//*[@id="basket-item-price-339"]').text
+
+df.loc[0, current_date] = float(''.join([i for i in price1 if i.isdigit()]))
 df.loc[1, current_date] = float(''.join([i for i in price2 if i.isdigit()]))
 ##записываем цену в таблицу и сохраняем
 df.to_csv( "C:/Users/Kirill/Desktop/project/output.csv" , index = False, encoding='utf-8')
