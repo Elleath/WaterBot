@@ -32,7 +32,7 @@ try:
 except Exception:
     pass   ##если не надо, то идем дальше
 button2 = browser.find_element("xpath", '//*[@id="acceptCookie"]') ##ищем нужные кнопки
-button3 = browser.find_element("xpath", '//*[@id="bx_1970176138_401_0564dce275e0399e557aae3bf75c32cd_buy_link"]')
+button3 = browser.find_element("xpath", '//*[@id="bx_1970176138_401_f5e07bd0ab70548a3db9e6f096af74cd_buy_link"]')
 #button1.click()
 #time.sleep(1)
 button2.click() ##нажимаем кнопки, чтобы появилась нужная цена
@@ -40,7 +40,7 @@ time.sleep(1)
 button3.click()
 time.sleep(3) ##задержка, чтобы данные успели подгрузиться
 ##находим нужный элемент и записываем в таблицу
-niag2 = browser.find_element("xpath", '//*[@id="bx_1970176138_401_0564dce275e0399e557aae3bf75c32cd_price"]').text
+niag2 = browser.find_element("xpath", '//*[@id="bx_1970176138_401_f5e07bd0ab70548a3db9e6f096af74cd_price"]').text
 df.loc[19, current_date] = float(''.join([i for i in niag2 if i.isdigit()]))
 ##сохраняем таблицу
 df.to_csv( "C:/Users/Kirill/Desktop/project/output.csv" , index = False, encoding='utf-8')
