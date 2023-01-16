@@ -4,6 +4,7 @@ import time
 import pandas as pd ##работа с csv
 
 current_date = str(date.today())
+logs_errors = []
 
 df = pd.read_csv("C:/Users/Kirill/Desktop/project/tara/tara_output.csv", delimiter = ",", encoding='utf-8')
 
@@ -22,7 +23,18 @@ except Exception:
             i = i + 1
         except Exception:
             print("Ошибка в скрипте №" + str(i))
+            logs_errors.append(i)
             i = i + 1
+            
+if logs_errors == []:
+    with open("C:/Users/Kirill/Desktop/project/logs/logs_tara.txt", "a") as logs:
+        logs.write(current_date + "\n")
+        logs.write("Ошибок нет")
+else:
+    with open("C:/Users/Kirill/Desktop/project/logs/logs_tara.txt", "a") as logs:
+        logs.write(current_date + "\n")
+        for log in logs_errors:
+            logs.write("Ошибка в скрипте " + str(log) + "\n")
 
 time.sleep(10)
 
