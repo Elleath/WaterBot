@@ -29,10 +29,16 @@ button1 = browser.find_element("xpath", '//*[@id="content"]/div/div/div/div[2]/d
 button1.click()
 time.sleep(1)
 browser.get("https://l-w.ru/personal/cart/")
-time.sleep(2)
+time.sleep(5)
+try:
+    ActionChains(browser).move_by_offset(100, 100).click().perform()
+    time.sleep(2)
+except Exception:
+    pass
 button2 = browser.find_element("xpath", '//*[@id="content"]/div/div[1]/div[1]/div/div[1]/div[3]/div[2]/div[2]/button[1]')
 button2.click()
 time.sleep(1)
+
 
 tara = browser.find_element("xpath", '//*[@id="content"]/div/div[1]/div[1]/div/div[1]/div[5]/div[2]/div[2]/div[1]/span[2]').text
 df.loc[9, current_date] = float(''.join([i for i in tara if i.isdigit()]))
