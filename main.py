@@ -5,6 +5,7 @@ import pandas as pd ##работа с csv
 
 current_date = str(date.today()) ##определяем текущую дату
 errors = []                      ##список ошибок для повторного перезапуска
+logs_errors = []
 
 df = pd.read_csv("C:/Users/Kirill/Desktop/project/output.csv", delimiter = ",", encoding='utf-8')
 ##открываем таблицу
@@ -15,7 +16,7 @@ except Exception:
     df.loc[:, current_date]= float(-1)   ##если даты нет, то добавляем
     df.to_csv( "C:/Users/Kirill/Desktop/project/output.csv" , index = False, encoding='utf-8')
     ##сохраняем таблицу
-    i = 0
+    i = 1
     while i <= 14:
         name = "C:/Users/Kirill/Desktop/project/scripts/script" + str(i) + ".py"
         try:
@@ -35,6 +36,18 @@ if errors != []:    ##повторно перезапускаем несрабо
             runpy.run_path(name)
         except Exception:
             print("Ошибка в скрипте №" + str(j) + ", попытка 2" )
+            logs_errors.append(j)
+
+if logs_errors == []:
+    with open("C:/Users/Kirill/Desktop/project/logs/logs_prices.txt", "a") as logs:
+        logs.write(current_date + "\n")
+        logs.write("Ошибок нет")
+else:
+    with open("C:/Users/Kirill/Desktop/project/logs/logs_prices.txt", "a") as logs:
+        logs.write(current_date + "\n")
+        for log in logs_errors:
+            logs.write("Ошибка в скрипте " + str(log) + "\n")
+    
       
 time.sleep(10)
 
