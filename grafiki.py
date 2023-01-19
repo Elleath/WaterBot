@@ -33,7 +33,7 @@ i = 1
 while len(x) != len(x_labels):
     x.append(i)
     i += 1
-df.to_csv( "C:/Users/Kirill/Desktop/project/output.csv" , index = False, encoding='utf-8')
+#df.to_csv( "C:/Users/Kirill/Desktop/project/output.csv" , index = False, encoding='utf-8')
 
 fig=Figure()
 canvas=FigureCanvas(fig)
