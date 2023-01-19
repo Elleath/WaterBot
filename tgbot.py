@@ -25,7 +25,8 @@ def hello(message):
         btn1 = types.KeyboardButton(text='Сравнить цены')
         btn2 = types.KeyboardButton(text='Построить графики изменения цены')
         btn3 = types.KeyboardButton(text='Цены на тару')
-        keyboard.add(btn1,btn2,btn3)
+        btn4 = types.KeyboardButton(text='Получить полную таблицу с ценами')
+        keyboard.add(btn1,btn2,btn3, btn4)
         bot.send_message(message.chat.id, 'Выберите желаемое:', reply_markup=keyboard)
         bot.register_next_step_handler(message, choice)
       
@@ -34,7 +35,8 @@ def hello(message):
         btn1 = types.KeyboardButton(text='Сравнить цены')
         btn2 = types.KeyboardButton(text='Построить графики изменения цены')
         btn3 = types.KeyboardButton(text='Цены на тару')
-        keyboard.add(btn1,btn2,btn3)
+        btn4 = types.KeyboardButton(text='Получить полную таблицу с ценами')
+        keyboard.add(btn1,btn2,btn3, btn4)
         bot.send_message(message.chat.id, 'Выберите желаемое:', reply_markup=keyboard)
         bot.register_next_step_handler(message, choice)
         
@@ -63,6 +65,8 @@ def choice(message):
         bot.register_next_step_handler(message, grafik) ##получаем значение и переходим в функцию
     elif choice1 == "Цены на тару":
         tara(message)    ##переходим в соответствующую функцию
+    elif choice1 == "Получить полную таблицу с ценами":
+        full_table(message)
     else:
         bot.send_message(message.from_user.id, "Ошибка")
         hello(message)  ##откатываемся назад при неверном вводе
@@ -75,7 +79,7 @@ def analysis(message):
         datesmessage = "Для анализа доступны даты с " + list(df.columns)[2] + " по " + list(df.columns)[-1]
         bot.send_message(message.from_user.id, datesmessage, reply_markup=types.ReplyKeyboardRemove())
         time.sleep(1)
-        df.to_csv( "C:/Users/Kirill/Desktop/project/output.csv" , index = False, encoding='utf-8')  
+        #df.to_csv( "C:/Users/Kirill/Desktop/project/output.csv" , index = False, encoding='utf-8')  
         bot.send_message(message.from_user.id, "Введите первую дату в формате ГГГГ-ММ-ДД")
         bot.register_next_step_handler(message, get_date1)
     else:
@@ -101,7 +105,7 @@ def use_old_dates(message):
          btn1 = types.KeyboardButton(text='Полный (в чат)')
          btn2 = types.KeyboardButton(text='Короткий (в чат)')
          btn3 = types.KeyboardButton(text='Полный в txt')
-         btn4 = types.KeyboardButton(text='Полный в csv')
+         btn4 = types.KeyboardButton(text='Полный в xlsx')
          keyboard2.add(btn1,btn2,btn3,btn4)
          bot.send_message(message.chat.id, 'Выберите тип вывода: ', reply_markup=keyboard2)
          bot.register_next_step_handler(message, tip)
@@ -125,7 +129,8 @@ def returning(message):
         btn1 = types.KeyboardButton(text='Сравнить цены')
         btn2 = types.KeyboardButton(text='Построить графики изменения цены')
         btn3 = types.KeyboardButton(text='Цены на тару')
-        keyboard.add(btn1,btn2,btn3)
+        btn4 = types.KeyboardButton(text='Получить полную таблицу с ценами')
+        keyboard.add(btn1,btn2,btn3, btn4)
         bot.send_message(message.chat.id, 'Выберите желаемое:', reply_markup=keyboard)
         bot.register_next_step_handler(message, choice)
     else:
@@ -146,7 +151,7 @@ def get_date1(message):
         except Exception:
             bot.send_message(message.from_user.id, "Дата введена неверно, попробуйте еще раз")
             bot.register_next_step_handler(message, get_date1)
-        df.to_csv( "C:/Users/Kirill/Desktop/project/output.csv" , index = False, encoding='utf-8')
+        #df.to_csv( "C:/Users/Kirill/Desktop/project/output.csv" , index = False, encoding='utf-8')
 
 def get_date2(message):
     global date2;
@@ -166,11 +171,11 @@ def get_date2(message):
                 btn1 = types.KeyboardButton(text='Полный (в чат)')
                 btn2 = types.KeyboardButton(text='Короткий (в чат)')
                 btn3 = types.KeyboardButton(text='Полный в txt')
-                btn4 = types.KeyboardButton(text='Полный в csv')
+                btn4 = types.KeyboardButton(text='Полный в xlsx')
                 keyboard2.add(btn1,btn2,btn3,btn4)
                 bot.send_message(message.chat.id, 'Выберите тип вывода: ', reply_markup=keyboard2)
                 bot.register_next_step_handler(message, tip)
-                df.to_csv( "C:/Users/Kirill/Desktop/project/output.csv" , index = False, encoding='utf-8')
+                #df.to_csv( "C:/Users/Kirill/Desktop/project/output.csv" , index = False, encoding='utf-8')
         except Exception:
             bot.send_message(message.from_user.id, "Дата введена неверно, попробуйте еще раз")
             bot.register_next_step_handler(message, get_date2)
@@ -284,13 +289,13 @@ def tip(message):
             bot.send_document(message.from_user.id, doc)
             doc.close()
 
-        elif tip == "Полный в csv":
+        elif tip == "Полный в xlsx":
             #df = pd.read_csv("C:/Users/Kirill/Desktop/project/output.csv", delimiter = ",", encoding='utf-8')
             with open("C:/Users/Kirill/Desktop/project/forCSV/rezult1.txt", "w", encoding = "utf-8") as f:
-                f.write("Название,Кол-во," + dateold + "," + datenew + ",Изменение\n")
-                for i in range(0,24):
+                f.write("Название,Кол-во," + dateold + "," + datenew + ",Изменение\n") ##открываем txt для записи
+                for i in range(0,24): ##перебираем строки
                     name = str(df.loc[i, "Название"])
-                    kolvo = str(df.loc[i, "Кол-во"])
+                    kolvo = str(df.loc[i, "Кол-во"]) ##берем необходимые данные из таблицы
                     oldprice = df.loc[i, dateold]
                     newprice = df.loc[i, datenew]
 
@@ -298,7 +303,7 @@ def tip(message):
                         change = round(((df.loc[i, datenew] - df.loc[i, dateold])/df.loc[i, dateold])*100, 2)
                         if change >= 0:
                             rezult_message = name + "," + kolvo + "," + str(oldprice) + "," + str(newprice) + "," + "+" + str(change) + "%"
-                            f.write(rezult_message + '\n')
+                            f.write(rezult_message + '\n')  ##записываем данные в файл в форме csv(разеделение через запятую)
                             #time.sleep(1)
                         else:
                             rezult_message = name + "," + kolvo + "," + str(oldprice) + "," + str(newprice) + "," + str(change) + "%"
@@ -311,15 +316,15 @@ def tip(message):
             #df.to_csv( "C:/Users/Kirill/Desktop/project/output.csv" , index = False, encoding='utf-8')
 
             df1 = pd.read_csv('C:/Users/Kirill/Desktop/project/forCSV/rezult1.txt',delimiter = ",", encoding='utf-8')
-            df1.to_csv('C:/Users/Kirill/Desktop/project/forCSV/rezult_change.csv', index = False, encoding='utf-8')
-
-            doc = open("C:/Users/Kirill/Desktop/project/forCSV/rezult_change.csv", 'r', encoding = "utf-8")
-            bot.send_document(message.from_user.id, doc)
+            df1.to_excel('C:/Users/Kirill/Desktop/project/forCSV/rezult_change.xlsx', index = False)
+            ##реобразуем полученный txt в xlsx
+            doc = open("C:/Users/Kirill/Desktop/project/forCSV/rezult_change.xlsx", 'rb')
+            bot.send_document(message.from_user.id, doc) ##отправляем пользователю
             doc.close()    
         else:
-            bot.send_message(message.from_user.id, "Тип выбран неверно, попробуйте еще")
-            bot.register_next_step_handler(message, tip)
-        df.to_csv( "C:/Users/Kirill/Desktop/project/output.csv" , index = False, encoding='utf-8')
+            bot.send_message(message.from_user.id, "Ошибка")
+            #bot.register_next_step_handler(message, tip)
+        #df.to_csv( "C:/Users/Kirill/Desktop/project/output.csv" , index = False, encoding='utf-8')
 
         keyboard = types.ReplyKeyboardMarkup(row_width=3, resize_keyboard=True, one_time_keyboard=True)
         btn1 = types.KeyboardButton(text='Заново')
@@ -350,7 +355,8 @@ def grafik(message):
                 btn1 = types.KeyboardButton(text='Сравнить цены')
                 btn2 = types.KeyboardButton(text='Построить графики изменения цены')
                 btn3 = types.KeyboardButton(text='Цены на тару')
-                keyboard.add(btn1,btn2,btn3)
+                btn4 = types.KeyboardButton(text='Получить полную таблицу с ценами')
+                keyboard.add(btn1,btn2,btn3, btn4)
                 bot.send_message(message.chat.id, 'Выберите желаемое:', reply_markup=keyboard)
                 bot.register_next_step_handler(message, choice)
         except Exception: ##если ввод неверный, идем назад
@@ -359,7 +365,8 @@ def grafik(message):
                 btn1 = types.KeyboardButton(text='Сравнить цены')
                 btn2 = types.KeyboardButton(text='Построить графики изменения цены')
                 btn3 = types.KeyboardButton(text='Цены на тару')
-                keyboard.add(btn1,btn2,btn3)
+                btn4 = types.KeyboardButton(text='Получить полную таблицу с ценами')
+                keyboard.add(btn1,btn2,btn3, btn4)
                 bot.send_message(message.chat.id, 'Выберите желаемое:', reply_markup=keyboard)
                 bot.register_next_step_handler(message, choice)
 
@@ -405,7 +412,7 @@ def tara(message):
             pass
         else:
             tara_message = tara_message + name_tara + ": " + str(df_tara.loc[i, last_date]) + " рублей \n"
-    df_tara.to_csv( "C:/Users/Kirill/Desktop/project/tara/tara_output.csv" , index = False, encoding='utf-8')
+    #df_tara.to_csv( "C:/Users/Kirill/Desktop/project/tara/tara_output.csv" , index = False, encoding='utf-8')
     bot.send_message(message.from_user.id, tara_message, reply_markup=types.ReplyKeyboardRemove())
     time.sleep(1)
     #bot.send_message(message.from_user.id, "Если хотите начать заново, то отправьте любое сообщение")
@@ -413,7 +420,18 @@ def tara(message):
     btn1 = types.KeyboardButton(text='Заново')
     keyboard.add(btn1)
     bot.send_message(message.chat.id, 'Если хотите начать заново, то нажмите кнопку', reply_markup=keyboard)
-        
+
+def full_table(message):
+    df_table = pd.read_csv("C:/Users/Kirill/Desktop/project/output.csv", delimiter = ",", encoding='utf-8')
+    df_table.to_excel("C:/Users/Kirill/Desktop/project/full_result.xlsx", index = False)
+
+    full_table = open("C:/Users/Kirill/Desktop/project/full_result.xlsx", 'rb')
+    bot.send_document(message.from_user.id, full_table)
+    full_table.close()
+    keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True, one_time_keyboard=True)
+    btn1 = types.KeyboardButton(text='Заново')
+    keyboard.add(btn1)
+    bot.send_message(message.chat.id, 'Если хотите начать заново, то нажмите кнопку', reply_markup=keyboard)
           
 #def perezapusk(message):
    # analysis(message)
