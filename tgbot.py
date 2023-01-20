@@ -4,8 +4,9 @@ from datetime import date, timedelta ##дата и время
 import time ##для sleep
 from telebot import types 
 import runpy ##для запуска скриптов
+import config
 
-bot = telebot.TeleBot('5639471781:AAFjwXx-Mvb3rH2HBpJMVgGR12Bs20fN88A')
+bot = telebot.TeleBot(config.TOKEN)
 
 date1 = ""
 date2 = ""
@@ -88,7 +89,7 @@ def analysis(message):
         btn1 = types.KeyboardButton(text='Да')
         btn2 = types.KeyboardButton(text='Нет')
         keyboard1.add(btn1,btn2)
-        bot.send_message(message.chat.id, 'Использовать уже введеные даты?', reply_markup=keyboard1)
+        bot.send_message(message.chat.id, 'Использовать уже введенные даты?', reply_markup=keyboard1)
         
         bot.register_next_step_handler(message, use_old_dates)
 
