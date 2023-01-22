@@ -29,7 +29,7 @@ except Exception:
 if logs_errors == []:
     with open("C:/Users/Kirill/Desktop/project/logs/logs_tara.txt", "a") as logs:
         logs.write(current_date + "\n")
-        logs.write("Ошибок нет")
+        logs.write("Ошибок нет \n")
 else:
     with open("C:/Users/Kirill/Desktop/project/logs/logs_tara.txt", "a") as logs:
         logs.write(current_date + "\n")
