@@ -286,9 +286,9 @@ def tip(message):
                         rezult_message = "Вода " + name + "("+ kolvo + ") на " + dateold +" стоила " + str(oldprice) + " руб, на " + datenew + " стоит " + str(newprice) + " руб, не могу посчитать изменение"
                         f.write(rezult_message + '\n')
                         #time.sleep(1)
-            doc = open("C:/Users/Kirill/Desktop/project/rezult.txt", 'r')
-            bot.send_document(message.from_user.id, doc)
-            doc.close()
+            with open("C:/Users/Kirill/Desktop/project/rezult.txt", 'r') as rezulttxt:
+                bot.send_document(message.from_user.id, rezulttxt)
+            #doc.close()
 
         elif tip == "Полный в xlsx":
             #df = pd.read_csv("C:/Users/Kirill/Desktop/project/output.csv", delimiter = ",", encoding='utf-8')
@@ -319,9 +319,9 @@ def tip(message):
             df1 = pd.read_csv('C:/Users/Kirill/Desktop/project/forCSV/rezult1.txt',delimiter = ",", encoding='utf-8')
             df1.to_excel('C:/Users/Kirill/Desktop/project/forCSV/rezult_change.xlsx', index = False)
             ##реобразуем полученный txt в xlsx
-            doc = open("C:/Users/Kirill/Desktop/project/forCSV/rezult_change.xlsx", 'rb')
-            bot.send_document(message.from_user.id, doc) ##отправляем пользователю
-            doc.close()    
+            with open("C:/Users/Kirill/Desktop/project/forCSV/rezult_change.xlsx", 'rb') as rezult_changexlsx:
+                bot.send_document(message.from_user.id, rezult_changexlsx) ##отправляем пользователю
+            #doc.close()    
         else:
             bot.send_message(message.from_user.id, "Ошибка")
             #bot.register_next_step_handler(message, tip)
@@ -342,9 +342,9 @@ def grafik(message):
                     f.write(str(nomer)) ##записываем номер в временный файл
                 runpy.run_path("C:/Users/Kirill/Desktop/project/grafiki.py") ##запускаем внешний скрипт
                 time.sleep(3) ##задержка для корректной работы внешного скрипта
-                sendmessage = open("C:/Users/Kirill/Desktop/project/grafik.png", "rb") 
-                bot.send_photo(message.chat.id, sendmessage) ##отправляем построенный график в чат
-                sendmessage.close()
+                with open("C:/Users/Kirill/Desktop/project/grafik.png", "rb") as sendmessage: 
+                    bot.send_photo(message.chat.id, sendmessage) ##отправляем построенный график в чат
+                #sendmessage.close()
                 time.sleep(1)
                 keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True, one_time_keyboard=True)
                 btn1 = types.KeyboardButton(text='Заново')
@@ -426,9 +426,9 @@ def full_table(message):
     df_table = pd.read_csv("C:/Users/Kirill/Desktop/project/output.csv", delimiter = ",", encoding='utf-8')
     df_table.to_excel("C:/Users/Kirill/Desktop/project/full_result.xlsx", index = False)
 
-    full_table = open("C:/Users/Kirill/Desktop/project/full_result.xlsx", 'rb')
-    bot.send_document(message.from_user.id, full_table)
-    full_table.close()
+    with open("C:/Users/Kirill/Desktop/project/full_result.xlsx", 'rb') as full_table:
+        bot.send_document(message.from_user.id, full_table)
+    #full_table.close()
     keyboard = types.ReplyKeyboardMarkup(row_width=1, resize_keyboard=True, one_time_keyboard=True)
     btn1 = types.KeyboardButton(text='Заново')
     keyboard.add(btn1)
